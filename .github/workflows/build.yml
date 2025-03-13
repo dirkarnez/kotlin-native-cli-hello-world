@@ -28,7 +28,7 @@ jobs:
         run: |
           cd /d "%USERPROFILE%\Downloads" &&^
           curl https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u382-b05/OpenJDK8U-jdk_x64_windows_hotspot_8u382b05.zip -L -O -J &&^
-          7z.exe x OpenJDK8U-jdk_x64_windows_hotspot_8u382b05 -o"OpenJDK8U-jdk_x64_windows_hotspot_8u382b05"
+          7z.exe x OpenJDK8U-jdk_x64_windows_hotspot_8u382b05.zip -o"OpenJDK8U-jdk_x64_windows_hotspot_8u382b05"
 
       - shell: cmd
         run: |
