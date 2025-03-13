@@ -1,0 +1,49 @@
+name: golang-build-actions-workflow
+on:
+  push:
+    # Sequence of patterns matched against refs/tags
+    tags:
+      - 'v*' # Push events to matching v*, i.e. v1.0, v20.15.10
+      
+permissions:
+    contents: write
+    
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [windows-latest] # , ubuntu-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - shell: cmd
+        run: |
+          cd /d "%USERPROFILE%\Downloads" &&^
+          curl https://github.com/JetBrains/kotlin/releases/download/v2.1.10/kotlin-native-prebuilt-windows-x86_64-2.1.10.zip -L -O -J &&^
+          7z.exe x kotlin-native-prebuilt-windows-x86_64-2.1.10.zip
+          
+          
+      - shell: cmd
+        run: |
+          cd /d "%USERPROFILE%\Downloads" &&^
+          curl https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u382-b05/OpenJDK8U-jdk_x64_windows_hotspot_8u382b05.zip -L -O -J &&^
+          7z.exe x OpenJDK8U-jdk_x64_windows_hotspot_8u382b05 -o"OpenJDK8U-jdk_x64_windows_hotspot_8u382b05"
+
+      - shell: cmd
+        run: |
+          .\local-build.cmd
+          
+      - name: Archive Release
+        uses: thedoctor0/zip-release@master
+        with:
+          type: 'zip'
+          path: ${{ github.event.repository.name }}*
+          filename: "${{ github.event.repository.name }}-${{ github.ref_name }}-${{ matrix.os }}.zip"
+          
+      - name: Release prebuilt
+        uses: ncipollo/release-action@v1
+        with:
+          artifacts: "${{ github.event.repository.name }}-${{ github.ref_name }}-${{ matrix.os }}.zip"
+          allowUpdates: true
+          token: ${{ secrets.GITHUB_TOKEN }}
