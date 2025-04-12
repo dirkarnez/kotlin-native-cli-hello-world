@@ -16,19 +16,19 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v4
-
-      - shell: cmd
+      
+      - shell: bash
         run: |
-          cd /d "%USERPROFILE%\Downloads" &&^
-          curl https://github.com/JetBrains/kotlin/releases/download/v2.1.10/kotlin-native-prebuilt-windows-x86_64-2.1.10.zip -L -O -J &&^
+          cd "$USERPROFILE/Downloads" && \
+          /C/msys64/usr/bin/wget.exe -nc "https://github.com/adoptium/temurin11-binaries/releases/download/jdk-11.0.26%2B4/OpenJDK11U-jdk_x64_windows_hotspot_11.0.26_4.zip" && \
+          7z.exe x OpenJDK11U-jdk_x64_windows_hotspot_11.0.26_4.zip -o"OpenJDK11U-jdk_x64_windows_hotspot_11.0.26_4"
+          
+      - shell: bash
+        run: |
+          cd "$USERPROFILE/Downloads" && \
+          /C/msys64/usr/bin/wget.exe -nc "https://github.com/JetBrains/kotlin/releases/download/v2.1.10/kotlin-native-prebuilt-windows-x86_64-2.1.10.zip" && \
           7z.exe x kotlin-native-prebuilt-windows-x86_64-2.1.10.zip -o"kotlin-native-prebuilt-windows-x86_64-2.1.10"
           
-      - shell: cmd
-        run: |
-          cd /d "%USERPROFILE%\Downloads" &&^
-          curl https://github.com/adoptium/temurin8-binaries/releases/download/jdk8u382-b05/OpenJDK8U-jdk_x64_windows_hotspot_8u382b05.zip -L -O -J &&^
-          7z.exe x OpenJDK8U-jdk_x64_windows_hotspot_8u382b05.zip -o"OpenJDK8U-jdk_x64_windows_hotspot_8u382b05"
-
       - shell: cmd
         run: |
           .\local-build.cmd
