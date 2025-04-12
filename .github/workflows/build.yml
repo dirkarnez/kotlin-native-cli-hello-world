@@ -1,4 +1,4 @@
-name: golang-build-actions-workflow
+name: kotlin-build-actions-workflow
 on:
   push:
     # Sequence of patterns matched against refs/tags
@@ -21,8 +21,7 @@ jobs:
         run: |
           cd /d "%USERPROFILE%\Downloads" &&^
           curl https://github.com/JetBrains/kotlin/releases/download/v2.1.10/kotlin-native-prebuilt-windows-x86_64-2.1.10.zip -L -O -J &&^
-          7z.exe x kotlin-native-prebuilt-windows-x86_64-2.1.10.zip
-          
+          7z.exe x kotlin-native-prebuilt-windows-x86_64-2.1.10.zip -o"kotlin-native-prebuilt-windows-x86_64-2.1.10"
           
       - shell: cmd
         run: |
